@@ -1,0 +1,213 @@
+SHOW DATABASES;
+
+ DROP DATABASE eei_2022_studentdetails;
+
+ SHOW DATABASES;
+
+CREATE DATABASE eei_2022_studentdetails;
+USE eei_2022_studentdetails;
+
+
+  CREATE DATABASE LABTEST2;
+  USE LABTEST2;
+
+  CREATE TABLE SUBJECT(
+     S_CODE VARCHAR(255) NOT NULL PRIMARY KEY,
+     S_TITLE VARCHAR(255) NOT NULL
+     );
+
+  DESC SUBJECT;
+
+  INSERT INTO SUBJECT(s_code,s_title)
+     VALUES
+     ('EEX4465','DATA STRUCTURES'),
+     ('EEX4366','DATA MODELLING'),
+     ('MHZ4259','STATISTICS'),
+     ('MHZ4379','MATHS'),
+     ('EEI3372','PYTHON'),
+     ('EEI4362','JAVA');
+
+    SELECT*FROM SUBJECT;
+
+    CREATE TABLE STUDENT(
+    
+     s_reg varchar(255) NOT NULL PRIMARY KEY,
+     s_fname varchar(255) NOT NULL,
+     s_sname varchar(255),
+     tel_no int ,
+     address varchar(255)
+     );
+
+    DESC STUDENT;
+
+    INSERT INTO STUDENT(s_reg,s_fname,s_sname,tel_no,address)
+     VALUES
+     ('01','ANURADHA','NANDASENA','0764571389','COLOMBO'),
+     ('02','NAWODA','NANDASENA','0764571389','BALANGODA'),
+     ('03','AKILA','LIYANAGE','0764571389','GALLE');
+
+    SELECT * FROM STUDENT;
+
+    CREATE TABLE STUDENT_SUBJECT(
+     s_reg VARCHAR(255) NOT NULL,
+     s_code varchar(255) NOT NULL,
+     year_reg DATE,
+     CONSTRAINT FK_STUDENTSTUDENT_SUBJECT FOREIGN KEY(s_reg) REFERENCES STUDENT(s_reg),
+     CONSTRAINT FK_SUBJECTSTUDENT_SUBJECT FOREIGN KEY(s_code) REFERENCES SUBJECT(s_code)
+     );
+
+    DESC STUDENT_SUBJECT;
+
+    INSERT INTO STUDENT_SUBJECT(s_reg,s_code,year_reg)
+     VALUES
+     ('01','EEX4366','2020.08.28');
+
+     CREATE TABLE CLASS_SHEDULE(
+    
+     s_code varchar(255) NOT NULL,
+     classhall varchar(255) NOT NULL,
+     classdate DATE NOT NULL,
+     day VARCHAR(255),
+     time TIME,
+     CONSTRAINT FK_SUBJECTCLASS_SHEDULE FOREIGN KEY(s_code) REFERENCES SUBJECT(s_code)
+     );
+
+     DESC CLASS_SHEDULE;
+
+     INSERT INTO CLASS_SHEDULE(s_code,classhall,classdate,day,time)
+     VALUES('EEX4366','HALL-1','2022.06.15','SUNDAY','11.30.00'),
+             ('EEI4362','HALL-1','2022.06.14','SATURDAY','3.00.00');
+
+    SELECT  * FROM CLASS_SHEDULE;
+    
+     CREATE TABLE CLASSATTENDENCE(
+    
+     s_reg VARCHAR(255) NOT NULL,
+     s_code varchar(255) NOT NULL,
+     classdate DATE NOT NULL,
+     classhall varchar(255) NOT NULL,
+     attendence varchar(255),
+     CONSTRAINT FK_STUDENTCLASSATTENDENCE FOREIGN KEY(s_reg) REFERENCES STUDENT(s_reg),
+     CONSTRAINT FK_SUBJECTCLASSATTENDENCE FOREIGN KEY(s_code) REFERENCES SUBJECT(s_code)
+     );
+
+    DESC CLASSATTENDENCE;
+
+    INSERT INTO CLASSATTENDENCE(s_reg,s_code,classdate,classhall,attendence)
+     VALUES
+     ('01','EEX4366','2022.06.15','HALL-1','YES');
+
+    SELECT * FROM CLASSATTENDENCE;
+
+    ********************
+---PART ONE QUESTIONS ANSWERS
+     
+     --Q1
+     SELECT*FROM SUBJECT;   
+     
+     --Q2
+     SELECT S_REG,S_FNAME,S_SNAME,TEL_NO,ADDRESS FROM STUDENT LIMIT 5;
+    
+    --Q3
+     SELECT S_REG FROM STUDENT;
+    
+     --Q5
+     SELECT S_FNAME AS FIRST_NAME,S_SNAME AS SURNAME FROM STUDENT;
+     
+     --Q6
+     SELECT S_REG FROM STUDENT_SUBJECT WHERE S_CODE='EEX4366';
+     
+     --Q4
+     SELECT S_FNAME,S_SNAME,TEL_NO FROM STUDENT ORDER BY S_FNAME ASC;
+     
+     --Q7
+     SELECT s_code FROM CLASS_SHEDULE WHERE classdate != '2022.06.15';
+
+     --Q8
+     SELECT s_code FROM CLASS_SHEDULE WHERE DAY='SUNDAY' AND DAY='SATURDAY';
+
+     ---Q 9
+     SELECT S_CODE FROM CLASS_SHEDULE WHERE DAY='SUNDAY' AND CLASSHALL='HALL=1';
+
+     --Q 10
+     SELECT s_code FROM CLASS_SHEDULE WHERE classdate != '2022.06.15';
+
+----------------------------------------------------------------------------------------
+
+
+----TASK TWO ANSWERS
+
+
+     --Q1
+     CREATE DATABASE ABC_COMPANY;
+     SHOW DATABASES;
+
+     --Q 2
+     USE ABC_COMPANY;
+
+     CREATE TABLE  Employees(
+    empno VARCHAR(10) NOT NULL PRIMARY KEY,
+    lname VARCHAR(10) NOT NULL,
+    fname VARCHAR(20) NOT NULL,
+    email VARCHAR(30) NOT NULL
+    
+    );
+ 
+    SHOW TABLES ;
+
+-- customer table 
+    
+    CREATE TABLE  customers(
+    cusNo VARCHAR(20) NOT NULL PRIMARY KEY,
+    cName VARCHAR(20) NOT NULL,
+    contact_No VARCHAR(20) NOT NULL,
+    city VARCHAR(20) NOT NULL,
+    address VARCHAR(20) NOT NULL
+
+    );
+    
+    SHOW TABLES ;
+
+-- product table 
+
+    CREATE TABLE  products(
+    productCode VARCHAR(20) NOT NULL PRIMARY KEY,
+    productName VARCHAR(20) NOT NULL UNIQUE,
+    productLine VARCHAR(20) NOT NULL,
+    productDiscription VARCHAR(20) NOT NULL,
+    quantityInStock VARCHAR(10),
+    buyPrice INT(20)
+    
+    );
+    
+    SHOW TABLES ;
+
+-- order table 
+
+    CREATE TABLE  orders(
+    orderId VARCHAR(20) NOT NULL PRIMARY KEY,
+    orderDate VARCHAR(20) NOT NULL,
+    status VARCHAR(20),
+    cusNo VARCHAR(20) NOT NULL,
+    CONSTRAINT FOREIGN KEY(cusNo) REFERENCES customers(cusNo)
+    
+    );
+ 
+    SHOW TABLES ;
+
+    ---Q3
+    ALTER TABLE CUSTOMERS ADD postalCode VARCHAR(20);
+
+    DESC CUSTOMERS;
+
+    --Q4
+    ALTER TABLE products MODIFY productDiscription VARCHAR(50);
+    DESC products;
+
+    --Q5
+    ALTER TABLE customers DROP COLUMN city;
+    DESC CUSTOMERS;
+
+    --Q6
+    TRUNCATE TABLE orders;
+    DESC orders;
